@@ -57,7 +57,7 @@ impl PrefixTree {
   }
 }
 
-struct Dictionary {
+pub struct Dictionary {
   prefix_tree: PrefixTree,
 }
 

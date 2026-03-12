@@ -1,4 +1,4 @@
-struct CoprimeGenerator {
+pub struct CoprimeGenerator {
   n: u64,
   ab: (u64, u64),
   cd: (u64, u64),
@@ -21,7 +21,7 @@ impl Iterator for CoprimeGenerator {
     let (a, b) = self.ab;
     let (c, d) = self.cd;
 
-    if a > self.n {
+    if c > self.n {
       return None;
     }
 
@@ -32,7 +32,7 @@ impl Iterator for CoprimeGenerator {
     self.ab = (c, d);
     self.cd = (e, f);
 
-    Some((a, b))
+    Some((c, d))
   }
 }
 
@@ -44,10 +44,18 @@ mod tests {
   use crate::coprime_pairs::CoprimeGenerator;
 
   #[gtest]
+  fn until_1() {
+    expect_that!(
+      CoprimeGenerator::new(1).collect_vec(),
+      unordered_elements_are![&(1, 1)],
+    );
+  }
+
+  #[gtest]
   fn until_2() {
     expect_that!(
       CoprimeGenerator::new(2).collect_vec(),
-      unordered_elements_are![&(0, 1), &(1, 1), &(1, 2)],
+      unordered_elements_are![&(1, 1), &(1, 2)],
     );
   }
 
@@ -55,7 +63,7 @@ mod tests {
   fn until_3() {
     expect_that!(
       CoprimeGenerator::new(3).collect_vec(),
-      unordered_elements_are![&(0, 1), &(1, 1), &(1, 2), &(1, 3), &(2, 3)],
+      unordered_elements_are![&(1, 1), &(1, 2), &(1, 3), &(2, 3)],
     );
   }
 
@@ -63,15 +71,7 @@ mod tests {
   fn until_4() {
     expect_that!(
       CoprimeGenerator::new(4).collect_vec(),
-      unordered_elements_are![
-        &(0, 1),
-        &(1, 1),
-        &(1, 2),
-        &(1, 3),
-        &(2, 3),
-        &(1, 4),
-        &(3, 4),
-      ],
+      unordered_elements_are![&(1, 1), &(1, 2), &(1, 3), &(2, 3), &(1, 4), &(3, 4),],
     );
   }
 
@@ -80,7 +80,6 @@ mod tests {
     expect_that!(
       CoprimeGenerator::new(5).collect_vec(),
       unordered_elements_are![
-        &(0, 1),
         &(1, 1),
         &(1, 2),
         &(1, 3),
@@ -100,7 +99,6 @@ mod tests {
     expect_that!(
       CoprimeGenerator::new(6).collect_vec(),
       unordered_elements_are![
-        &(0, 1),
         &(1, 1),
         &(1, 2),
         &(1, 3),
