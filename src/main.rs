@@ -1,3 +1,4 @@
+mod coprime_pairs;
 mod dictionary;
 
 fn main() {
